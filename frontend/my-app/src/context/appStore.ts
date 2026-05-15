@@ -7,6 +7,7 @@ interface RagMessage {
 
 interface AppState {
   // Document Context
+  documentId: string | null;
   pdfFile: File | null;
   pdfText: string | null;
   pdfName: string | null;
@@ -32,6 +33,7 @@ interface AppState {
 }
 
 const initialState = {
+  documentId: null,
   pdfFile: null,
   pdfText: null,
   pdfName: null,

@@ -30,18 +30,34 @@ export const PdfUploader: React.FC = () => {
 
     setIsUploading(true);
 
-    // Simulate upload and processing
-    // In a real app, this would call an API
-    setTimeout(() => {
-      setPdfData({
-        pdfFile: file,
-        pdfName: file.name,
-        pdfSizeKb: file.size / 1024,
-        pdfPages: 12, // Mocked
-        pdfText: 'Mocked PDF text content...',
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('http://localhost:8000/api/upload', {
+        method: 'POST',
+        body: formData,
       });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await response.json();
+      
+      setPdfData({
+        documentId: data.document_id,
+        pdfFile: file,
+        pdfName: data.metadata.name,
+        pdfSizeKb: data.metadata.size_kb,
+        pdfPages: data.metadata.pages,
+      });
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload PDF. Please check if the backend is running.');
+    } finally {
       setIsUploading(false);
-    }, 2000);
+    }
   };
 
   const onDrop = useCallback((e: React.DragEvent) => {

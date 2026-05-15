@@ -1,0 +1,8 @@
+streamlit
+openai
+python-dotenv
+pymupdf
+plotly
+scikit-learn
+numpy
+pinecone
